@@ -31,6 +31,7 @@
 		738A717B29750805008E7E7A /* LayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738A717A29750805008E7E7A /* LayoutFactory.swift */; };
 		738A717D2975124A008E7E7A /* MainCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738A717C2975124A008E7E7A /* MainCollectionViewDataSource.swift */; };
 		738A7180297524E3008E7E7A /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738A717F297524E3008E7E7A /* UIColor+Extension.swift */; };
+		738A71862975441E008E7E7A /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738A71852975441E008E7E7A /* Constant.swift */; };
 		C4ABEF50ED888EDF9871BF79 /* Pods_Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A8FBB8B32441A0F85F35497 /* Pods_Weather.framework */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,7 @@
 		738A717A29750805008E7E7A /* LayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutFactory.swift; sourceTree = "<group>"; };
 		738A717C2975124A008E7E7A /* MainCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		738A717F297524E3008E7E7A /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		738A71852975441E008E7E7A /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		F89B30B265D4332FD3A52673 /* Pods-Weather.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weather.release.xcconfig"; path = "Target Support Files/Pods-Weather/Pods-Weather.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -211,6 +213,7 @@
 		738A71792975078E008E7E7A /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				738A71852975441E008E7E7A /* Constant.swift */,
 				738A717729750770008E7E7A /* SectionType.swift */,
 				738A717A29750805008E7E7A /* LayoutFactory.swift */,
 			);
@@ -354,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				738A71732975037E008E7E7A /* FiveDaysWeatherCell.swift in Sources */,
+				738A71862975441E008E7E7A /* Constant.swift in Sources */,
 				738A717529750630008E7E7A /* DetailInfoCell.swift in Sources */,
 				738A71572974E160008E7E7A /* AppCoordinator.swift in Sources */,
 				738A717D2975124A008E7E7A /* MainCollectionViewDataSource.swift in Sources */,

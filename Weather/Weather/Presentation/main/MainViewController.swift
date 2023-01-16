@@ -10,6 +10,16 @@ import UIKit
 class MainViewController: UIViewController {
     private let dataSource = MainCollectionViewDataSource()
     
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.placeholder = Text.SearchBar.placeholder
+        searchBar.searchTextField.backgroundColor = .white
+        searchBar.delegate = self
+//        searchBar.setValue("취소", forKey: "cancelButtonText")
+//        searchBar.setShowsCancelButton(true, animated: true)
+        return searchBar
+    }()
+    
     private let collectionView: UICollectionView = {
         let layout = LayoutFactory.createLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -20,6 +30,10 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
 
         layout()
+    }
+    
+    private func setUpView() {
+        navigationItem.titleView = searchBar
     }
 
     private func setUpgradientLayer() {
@@ -40,6 +54,7 @@ class MainViewController: UIViewController {
     }
     
     private func layout() {
+        setUpView()
         setUpgradientLayer()
         setUpCollectionView()
         
@@ -51,6 +66,16 @@ class MainViewController: UIViewController {
             $0.trailing.equalTo(view.safeAreaLayoutGuide).offset(-10)
         }
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+        searchBar.resignFirstResponder()
+    }
 
 }
 
+extension MainViewController: UISearchBarDelegate {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.becomeFirstResponder()
+    }
+}
