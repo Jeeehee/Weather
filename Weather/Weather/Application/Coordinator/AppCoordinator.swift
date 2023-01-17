@@ -6,20 +6,53 @@
 //
 
 import UIKit
+import RxSwift
+import RxRelay
 
-final class AppCoordinator: BaseCoordinator {
+final class AppCoordinator: BaseCoordinator, Navigation {
+    private let disposeBag = DisposeBag()
+    
     var childCoordinators: [BaseCoordinator] = []
     var navigationController: UINavigationController
     
-    private let diContainer: DIContainer
+    let diContainer: DIContainer
+    
+    // MARK: Navigation
+    var showSearchView = PublishRelay<Void>()
     
     init(navigationController: UINavigationController, diContainer: DIContainer) {
         self.navigationController = navigationController
         self.diContainer = diContainer
+        
+        bind()
     }
     
     func start() {
-        let viewController = diContainer.makeMainViewController()
-        navigationController.pushViewController(viewController, animated: true)
+        let child = MainCoordinator(navigationController: navigationController, navigation: self)
+        addChild(child)
+        child.parentCoordinator = self
+        child.navigation = self
+        child.start()
+    }
+    
+    func showSearchViewContoller() {
+        let removeChild = MainCoordinator(navigationController: navigationController, navigation: self)
+        childDidFinish(removeChild)
+        
+        let child = SearchCoordinator(navigationController: navigationController, navigation: self)
+        addChild(child)
+        child.parentCoordinator = self
+        child.navigation = self
+        child.start()
+    }
+    
+    private func bind() {
+        showSearchView
+            .withUnretained(self)
+            .bind { coordinator, _ in
+                self.showSearchViewContoller()
+            }
+            .disposed(by: disposeBag)
     }
 }
+
