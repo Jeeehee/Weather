@@ -6,17 +6,22 @@
 //
 
 import UIKit
+import SnapKit
+import RxSwift
+import RxCocoa
+import RxAppState
+import Alamofire
 
 class MainViewController: UIViewController {
+    private let disposeBag = DisposeBag()
     private let dataSource = MainCollectionViewDataSource()
+    private var viewModel: MainViewModelProtocol?
     
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = Text.SearchBar.placeholder
         searchBar.searchTextField.backgroundColor = .white
         searchBar.delegate = self
-//        searchBar.setValue("취소", forKey: "cancelButtonText")
-//        searchBar.setShowsCancelButton(true, animated: true)
         return searchBar
     }()
     
@@ -26,10 +31,30 @@ class MainViewController: UIViewController {
         return collectionView
     }()
     
+    convenience init(viewModel: MainViewModelProtocol) {
+        self.init()
+        self.viewModel = viewModel
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         layout()
+        bind()
+    }
+    
+    private func bind() {
+        guard let viewModel = viewModel else { return }
+        
+        rx.viewDidLoad
+            .bind(to: viewModel.viewDidLoad)
+            .disposed(by: disposeBag)
+        
+        searchBar.rx.textDidBeginEditing
+            .bind(to: viewModel.didTapSearchBar)
+            .disposed(by: disposeBag)
+        
+        print("Count is \(viewModel.weather.value.count)")
     }
     
     private func setUpView() {
@@ -66,16 +91,14 @@ class MainViewController: UIViewController {
             $0.trailing.equalTo(view.safeAreaLayoutGuide).offset(-10)
         }
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-        searchBar.resignFirstResponder()
-    }
-
 }
 
 extension MainViewController: UISearchBarDelegate {
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.becomeFirstResponder()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }
