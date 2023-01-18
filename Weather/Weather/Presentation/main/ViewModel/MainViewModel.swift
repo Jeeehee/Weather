@@ -19,7 +19,7 @@ protocol MainViewModelInput {
 }
 
 protocol MainViewModelOutput {
-    var weather: BehaviorRelay<[Weather]> { get }
+    var item: BehaviorRelay<MainItemViewModel> { get }
 }
 
 protocol MainViewModelProtocol: MainViewModelInput, MainViewModelOutput {
@@ -40,7 +40,7 @@ final class MainViewModel: MainViewModelProtocol {
     let didTapSearchBar = PublishRelay<Void>()
     
     // MARK: OutPut
-    var weather = BehaviorRelay<[Weather]>(value: [])
+    var item = BehaviorRelay<MainItemViewModel>(value: MainItemViewModel(model: nil))
     
     init(useCase: WeatherUseCase, navigation: Navigation, apiKey: String) {
         self.useCase = useCase
@@ -52,14 +52,23 @@ final class MainViewModel: MainViewModelProtocol {
 
 extension MainViewModel {
     func bind(to navigation: Navigation) {
+        let data = useCase
+            .start(WeatherList.self, lat: "36.783611", lon: "127.004173", apiKey: apiKey)
+            .subscribe { event in
+                switch event {
+                case .success(let data):
+                    let weatherData = MainItemViewModel(model: data)
+                    self.item.accept(weatherData)
+                case .failure(let error):
+                    let error = NetworkError.error(error)
+                    fatalError("\(error.localizedDescription)")
+                }
+            }
+            .disposed(by: disposeBag)
         
         viewDidLoad
-            .flatMapLatest { dd in
-                return self.useCase.start(city: "seoul", appKey: self.apiKey)
-                    .asObservable()
-            }
-        
-        
+            .accept(data)
+           
         didTapSearchBar
             .bind(to: navigation.showSearchView)
             .disposed(by: disposeBag)
