@@ -15,9 +15,17 @@ final class CurrentWeatherCell: UICollectionViewCell {
 
     private let stackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.axis = .horizontal
+        stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.spacing = 7
+        return stackView
+    }()
+    
+    private let temperatureStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.spacing = 10
         return stackView
     }()
     
@@ -40,41 +48,47 @@ final class CurrentWeatherCell: UICollectionViewCell {
     
     private func setupLabels() {
         cityLabel.textColor = .white
-        cityLabel.font = .init(name: Font.Roboto.regular, size: 18)
+        cityLabel.font = .init(name: Font.NotoSans.bold, size: 25)
         
         temperatureLabel.textColor = .white
-        temperatureLabel.font = .init(name: Font.Roboto.regular, size: 70)
+        temperatureLabel.font = .init(name: Font.Roboto.bold, size: 65)
         
         let labelsInStackView = [weatherStateLabel, minimumLabel, maximumLabel]
         labelsInStackView.forEach {
             $0.textColor = .white
-            $0.font = .init(name: Font.NotoSans.regular, size: 15)
+            $0.font = .init(name: Font.Roboto.regular, size: 16)
+            temperatureStackView.addArrangedSubview($0)
         }
     }
     
     private func layout() {
         setupLabels()
         
-        contentView.addSubview(cityLabel)
         contentView.addSubview(stackView)
         contentView.addSubview(temperatureLabel)
         
-        stackView.addArrangedSubview(weatherStateLabel)
-        stackView.addArrangedSubview(minimumLabel)
-        stackView.addArrangedSubview(maximumLabel)
-        
-        cityLabel.snp.makeConstraints {
-            $0.top.leading.equalToSuperview()
-        }
+        stackView.addArrangedSubview(cityLabel)
+        stackView.addArrangedSubview(temperatureStackView)
         
         stackView.snp.makeConstraints {
-            $0.top.equalTo(cityLabel.snp.bottom).offset(20)
-            $0.leading.equalToSuperview()
+            $0.centerY.leading.equalToSuperview()
         }
         
         temperatureLabel.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview()
+            $0.centerY.trailing.equalToSuperview()
         }
     }
 }
     
+// MARK: Inject Cell Data
+extension CurrentWeatherCell {
+    func configureCell(with model: Current?) {
+        guard let model = model else { return }
+    
+        cityLabel.text = "안산"
+        temperatureLabel.text = String.fahrenheitTocelsius(fahrenheit: model.temp)
+        minimumLabel.text = String.fahrenheitTocelsius(fahrenheit: model.temp)
+        maximumLabel.text = String.fahrenheitTocelsius(fahrenheit: model.temp)
+        weatherStateLabel.text = model.weather.map { $0.main }.joined()
+    }
+}

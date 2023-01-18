@@ -23,7 +23,7 @@ final class LayoutFactory {
     }
     
     static func creatCurrentCellLayout() -> NSCollectionLayoutSection {
-        let inset: CGFloat = 10
+        let inset: CGFloat = 30
         
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -43,17 +43,17 @@ final class LayoutFactory {
     }
     
     static func createTodayCellLayout() -> NSCollectionLayoutSection {
-        let inset: CGFloat = 10
+        let inset: CGFloat = 30
         
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0))
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.23),
+            widthDimension: .fractionalWidth(0.22),
             heightDimension: .absolute(120))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: inset)
+        item.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 15)
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
@@ -67,7 +67,7 @@ final class LayoutFactory {
     }
     
     static func createFiveDaysCellLayout() -> NSCollectionLayoutSection {
-        let inset: CGFloat = 1
+        let inset: CGFloat = 2
         
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -77,7 +77,7 @@ final class LayoutFactory {
             heightDimension: .absolute(55))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: 0, leading: 10, bottom: inset, trailing: 10)
+        item.contentInsets = .init(top: 0, leading: 30, bottom: inset, trailing: 30)
         
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: groupSize,
@@ -103,9 +103,11 @@ final class LayoutFactory {
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
-            repeatingSubitem: item,
-            count: 2)
+            subitems: [item])
+        
         let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .init(top: 0, leading: 20, bottom: 20, trailing: 20)
+        
         return section
     }
 }

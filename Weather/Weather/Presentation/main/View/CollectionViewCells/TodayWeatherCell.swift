@@ -21,25 +21,9 @@ final class TodayWeatherCell: UICollectionViewCell {
         return stackView
     }()
     
-    private let temperatureImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
-    
-    private let timeLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .lightGray
-        label.font = .init(name: Font.Roboto.regular, size: 13)
-        return label
-    }()
-    
-    private let temperatureLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = .init(name: Font.Roboto.bold, size: 25)
-        return label
-    }()
+    private let temperatureImage = UIImageView ()
+    private let timeLabel = UILabel()
+    private let temperatureLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -54,8 +38,12 @@ final class TodayWeatherCell: UICollectionViewCell {
     
     private func setUpView() {
         contentView.layer.masksToBounds = true
-        contentView.layer.cornerRadius = 20
+        contentView.layer.cornerRadius = 35
         contentView.backgroundColor = .backGroundBlue
+        
+        temperatureImage.contentMode = .scaleAspectFill
+        timeLabel.font = .init(name: Font.Roboto.regular, size: 14)
+        temperatureLabel.font = .init(name: Font.Roboto.bold, size: 23)
     }
     
     private func layout() {
@@ -63,8 +51,8 @@ final class TodayWeatherCell: UICollectionViewCell {
         
         contentView.addSubview(stackView)
         
-        stackView.addArrangedSubview(temperatureImage)
         stackView.addArrangedSubview(timeLabel)
+        stackView.addArrangedSubview(temperatureImage)
         stackView.addArrangedSubview(temperatureLabel)
         
         temperatureImage.snp.makeConstraints {
@@ -72,8 +60,20 @@ final class TodayWeatherCell: UICollectionViewCell {
         }
         
         stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalToSuperview().offset(15)
+            $0.bottom.equalToSuperview().offset(-15)
+            $0.centerX.centerY.equalToSuperview()
         }
+    }
+}
+
+// MARK: Inject Cell Data
+extension TodayWeatherCell {
+    func configureCell(with model: Hourly?) {
+        guard let model = model else { return }
         
+        temperatureImage.image = UIImage(named: "temp")
+        timeLabel.text = String.getHour(date: model.date)
+        temperatureLabel.text = String.fahrenheitTocelsius(fahrenheit: model.temp)
     }
 }

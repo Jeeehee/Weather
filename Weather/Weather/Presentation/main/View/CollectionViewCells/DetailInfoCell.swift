@@ -22,25 +22,9 @@ final class DetailInfoCell: UICollectionViewCell {
         return stackView
     }()
     
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = .init(name: Font.NotoSans.regular, size: 14)
-        return label
-    }()
-    
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = .init(name: Font.Roboto.bold, size: 30)
-        return label
-    }()
+    private let imageView = UIImageView()
+    private let titleLabel = UILabel()
+    private let descriptionLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,6 +42,12 @@ final class DetailInfoCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 20
         contentView.backgroundColor = .black
         contentView.alpha = 0.3
+        
+        imageView.contentMode = .scaleAspectFill
+        titleLabel.textColor = .white
+        titleLabel.font = .init(name: Font.NotoSans.regular, size: 14)
+        descriptionLabel.textColor = .white
+        descriptionLabel.font = .init(name: Font.Roboto.bold, size: 30)
     }
     
     private func layout() {
@@ -74,4 +64,17 @@ final class DetailInfoCell: UICollectionViewCell {
         }
     }
     
+}
+
+// MARK: Inject Cell Data
+extension DetailInfoCell {
+    func configureCell(with model: Current?) {
+        guard let model = model else { return }
+//        let titleArray = ["습도", "체감온도", "풍속", "기압"]
+//        let descriptionArray: Any = [model.humidity, model.temp, model.windSpeed, model.pressure]
+        
+        imageView.image = UIImage(named: "temp")
+        titleLabel.text = "\(model.pressure)"
+        descriptionLabel.text = "\(model.humidity)"
+    }
 }
