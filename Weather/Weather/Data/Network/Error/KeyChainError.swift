@@ -11,4 +11,5 @@ enum KeyChainError: Error {
     case noPassword
     case unexpectedPasswordData
     case unknown(OSStatus)
+    case error(Error)
 }

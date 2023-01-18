@@ -11,7 +11,7 @@ extension String {
     static func getHour(date: Int) -> String {
         let date = Date(timeIntervalSince1970: Double(date))
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH시"
+        dateFormatter.dateFormat = "HH a"
         return dateFormatter.string(from: date)
     }
     
