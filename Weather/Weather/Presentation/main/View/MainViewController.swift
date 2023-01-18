@@ -7,9 +7,10 @@
 
 import UIKit
 import SnapKit
-import RxSwift
 import RxCocoa
+import RxSwift
 import RxAppState
+import RxDataSources
 import Alamofire
 
 class MainViewController: UIViewController {
@@ -42,7 +43,7 @@ class MainViewController: UIViewController {
         layout()
         bind()
     }
-    
+
     private func bind() {
         guard let viewModel = viewModel else { return }
         
@@ -50,11 +51,28 @@ class MainViewController: UIViewController {
             .bind(to: viewModel.viewDidLoad)
             .disposed(by: disposeBag)
         
-        searchBar.rx.textDidBeginEditing
+        searchBar.rx.searchButtonClicked
             .bind(to: viewModel.didTapSearchBar)
             .disposed(by: disposeBag)
         
-        print("Count is \(viewModel.weather.value.count)")
+        viewModel.item
+            .subscribe { data in
+                guard let data = data.element else { return }
+                self.dataSource.item = data
+                
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        collectionView.rx
+            .willBeginDragging
+            .subscribe(onNext: {
+                self.view.endEditing(true)
+                self.searchBar.resignFirstResponder()
+            })
+            .disposed(by: disposeBag)
     }
     
     private func setUpView() {
@@ -75,6 +93,7 @@ class MainViewController: UIViewController {
         collectionView.register(CurrentWeatherCell.self, forCellWithReuseIdentifier: CurrentWeatherCell.identifier)
         collectionView.register(TodayWeatherCell.self, forCellWithReuseIdentifier: TodayWeatherCell.identifier)
         collectionView.register(FiveDaysWeatherCell.self, forCellWithReuseIdentifier: FiveDaysWeatherCell.identifier)
+        collectionView.register(MapCell.self, forCellWithReuseIdentifier: MapCell.identifier)
         collectionView.register(DetailInfoCell.self, forCellWithReuseIdentifier: DetailInfoCell.identifier)
     }
     
@@ -86,19 +105,23 @@ class MainViewController: UIViewController {
         view.addSubview(collectionView)
         
         collectionView.snp.makeConstraints {
-            $0.top.bottom.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.equalTo(view.safeAreaLayoutGuide).offset(10)
-            $0.trailing.equalTo(view.safeAreaLayoutGuide).offset(-10)
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalToSuperview()
         }
     }
 }
 
 extension MainViewController: UISearchBarDelegate {
+    
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.becomeFirstResponder()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
 }

@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import RxSwift
 import RxCocoa
+import RxSwift
 
 protocol Navigation {
     var showSearchView: PublishRelay<Void> { get }
@@ -52,7 +52,7 @@ final class MainViewModel: MainViewModelProtocol {
 
 extension MainViewModel {
     func bind(to navigation: Navigation) {
-        let data = useCase
+        useCase
             .start(WeatherList.self, lat: "36.783611", lon: "127.004173", apiKey: apiKey)
             .subscribe { event in
                 switch event {
@@ -65,9 +65,6 @@ extension MainViewModel {
                 }
             }
             .disposed(by: disposeBag)
-        
-        viewDidLoad
-            .accept(data)
            
         didTapSearchBar
             .bind(to: navigation.showSearchView)
