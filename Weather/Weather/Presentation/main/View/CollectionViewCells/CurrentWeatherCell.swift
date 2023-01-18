@@ -82,13 +82,14 @@ final class CurrentWeatherCell: UICollectionViewCell {
     
 // MARK: Inject Cell Data
 extension CurrentWeatherCell {
-    func configureCell(with model: Current?) {
+    func configureCell(with model: Current?, and: Daily?) {
         guard let model = model else { return }
+        guard let daily = and else { return }
     
-        cityLabel.text = "안산"
-        temperatureLabel.text = String.fahrenheitTocelsius(fahrenheit: model.temp)
-        minimumLabel.text = String.fahrenheitTocelsius(fahrenheit: model.temp)
-        maximumLabel.text = String.fahrenheitTocelsius(fahrenheit: model.temp)
-        weatherStateLabel.text = model.weather.map { $0.main }.joined()
+        cityLabel.text = "아산"
+        temperatureLabel.text = "\(String.fahrenheitTocelsius(fahrenheit: model.temp))°"
+        minimumLabel.text = "최저 \(String.fahrenheitTocelsius(fahrenheit: daily.temp.min))°"
+        maximumLabel.text = "최고 \(String.fahrenheitTocelsius(fahrenheit: daily.temp.max))°"
+        weatherStateLabel.text = model.weather.map { $0.main }.joined().uppercased()
     }
 }

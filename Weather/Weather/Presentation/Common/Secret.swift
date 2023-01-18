@@ -31,8 +31,9 @@ struct Secret {
                 switch result {
                 case .success(let value):
                     key = value
-                case .failure(_):
-                    fatalError("Fail to read API Key")
+                case .failure(let error):
+                    let error = KeyChainError.error(error)
+                    fatalError("\(error.localizedDescription)")
                 }
             }
         return key

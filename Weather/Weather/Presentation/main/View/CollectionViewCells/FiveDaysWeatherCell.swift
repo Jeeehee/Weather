@@ -7,19 +7,17 @@
 
 import UIKit
 import SnapKit
+import Alamofire
+import AlamofireImage
 
 final class FiveDaysWeatherCell: UICollectionViewCell {
     static var identifier: String {
         return "\(self)"
     }
     
+    private let backGroundView = BackgroundView()
     private let dayLabel = UILabel()
-    
-    private let temperatureImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
+    private let temperatureImage = UIImageView()
     
     private let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -44,16 +42,14 @@ final class FiveDaysWeatherCell: UICollectionViewCell {
     }
     
     private func setUpView() {
-        contentView.layer.masksToBounds = true
-        contentView.layer.cornerRadius = 10
-        contentView.backgroundColor = .white
+        temperatureImage.contentMode = .scaleAspectFill
         
-//        dayLabel.textColor = .white
+        dayLabel.textColor = .white
         dayLabel.font = .init(name: Font.NotoSans.bold, size: 15)
         
         let labelsInStackView = [minimumLabel, maximumLabel]
         labelsInStackView.forEach {
-//            $0.textColor = .white
+            $0.textColor = .white
             $0.font = .init(name: Font.Roboto.bold, size: 15)
             stackView.addArrangedSubview($0)
         }
@@ -62,9 +58,14 @@ final class FiveDaysWeatherCell: UICollectionViewCell {
     private func layout() {
         setUpView()
         
+        contentView.addSubview(backGroundView)
         contentView.addSubview(stackView)
         contentView.addSubview(dayLabel)
         contentView.addSubview(temperatureImage)
+        
+        backGroundView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
         
         dayLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(20)
@@ -72,9 +73,9 @@ final class FiveDaysWeatherCell: UICollectionViewCell {
         }
         
         temperatureImage.snp.makeConstraints {
-            $0.width.height.equalTo(20)
+            $0.width.height.equalTo(30)
             $0.centerY.equalToSuperview()
-            $0.centerX.equalToSuperview().offset(-80)
+            $0.centerX.equalToSuperview().offset(-90)
         }
         
         stackView.snp.makeConstraints {
@@ -89,9 +90,20 @@ extension FiveDaysWeatherCell {
     func configureCell(with model: Daily?) {
         guard let model = model else { return }
         
+        getIcon(with: model.weather.map { $0.icon }.joined())
+        
         dayLabel.text = String.getDay(date: model.date)
-        temperatureImage.image = UIImage(named: "temp")
-        minimumLabel.text = "최저  \(String.fahrenheitTocelsius(fahrenheit: model.temp.min))"
-        maximumLabel.text = "최고  \(String.fahrenheitTocelsius(fahrenheit: model.temp.max))"
+        minimumLabel.text = "최저  \(String.fahrenheitTocelsius(fahrenheit: model.temp.min))°"
+        maximumLabel.text = "최고  \(String.fahrenheitTocelsius(fahrenheit: model.temp.max))°"
+    }
+    
+    private func getIcon(with icon: String) {
+        guard let url = URL(string: "https://openweathermap.org/img/wn/\(icon)@2x.png") else { return }
+        
+        AF.request(url)
+            .responseImage { response in
+                guard let data = response.data else { return }
+                self.temperatureImage.image = UIImage(data: data, scale: 1)
+            }
     }
 }
