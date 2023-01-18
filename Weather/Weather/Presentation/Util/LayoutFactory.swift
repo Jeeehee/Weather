@@ -16,9 +16,9 @@ final class LayoutFactory {
             case .current: return creatCurrentCellLayout()
             case .today: return createTodayCellLayout()
             case .fiveDays: return createFiveDaysCellLayout()
+            case .map: return createMapCellLayout()
             case .detail: return createDetailCellLayout()
             }
-
         }
     }
     
@@ -37,7 +37,7 @@ final class LayoutFactory {
             layoutSize: groupSize,
             subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 30, trailing: inset)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: inset, trailing: inset)
         
         return section
     }
@@ -61,7 +61,7 @@ final class LayoutFactory {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPaging
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 30, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 40, trailing: 0)
         
         return section
     }
@@ -83,7 +83,29 @@ final class LayoutFactory {
             layoutSize: groupSize,
             subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets.bottom = 20
+        section.contentInsets.bottom = 30
+        
+        return section
+    }
+    
+    static func createMapCellLayout() -> NSCollectionLayoutSection {
+        let inset: CGFloat = 30
+        
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0))
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(300))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = .init(top: 0, leading: inset, bottom: 0, trailing: inset)
+        
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: groupSize,
+            subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets.bottom = inset
         
         return section
     }
@@ -99,7 +121,7 @@ final class LayoutFactory {
             heightDimension: .absolute(140))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: inset, leading: inset, bottom: inset, trailing: inset)
+        item.contentInsets = .init(top: 0, leading: inset, bottom: inset, trailing: inset)
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,

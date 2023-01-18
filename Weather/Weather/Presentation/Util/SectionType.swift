@@ -8,5 +8,5 @@
 import Foundation
 
 enum SectionType: Int, CaseIterable {
-    case current, today, fiveDays, detail
+    case current, today, fiveDays, map, detail
 }
