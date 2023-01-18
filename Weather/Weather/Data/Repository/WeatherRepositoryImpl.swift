@@ -34,8 +34,8 @@ extension WeatherRepositoryImpl: WeatherRepository, ResponseDecoder {
                             return }
                         observer(.success(decodeData))
                         
-                    case .failure(_):
-                        let error = NetworkError.decodeFailed
+                    case .failure(let error):
+                        let error = NetworkError.error(error)
                         observer(.failure(error))
                     }
                 }

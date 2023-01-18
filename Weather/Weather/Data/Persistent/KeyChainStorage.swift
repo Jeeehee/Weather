@@ -51,7 +51,7 @@ final class KeyChainStorage {
             
             guard let existingItem = item as? [String: Any],
                   let data = existingItem[kSecValueData as String] as? Data,
-                  let password = String(data: data, encoding: .utf8) else  {
+                  let password = String(data: data, encoding: .utf8) else {
                 observer(.failure(error.unexpectedPasswordData))
                 return Disposables.create {}
             }

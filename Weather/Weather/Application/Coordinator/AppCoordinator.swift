@@ -49,10 +49,9 @@ final class AppCoordinator: BaseCoordinator, Navigation {
     private func bind() {
         showSearchView
             .withUnretained(self)
-            .bind { coordinator, _ in
+            .bind { _, _ in
                 self.showSearchViewContoller()
             }
             .disposed(by: disposeBag)
     }
 }
-

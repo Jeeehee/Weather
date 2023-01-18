@@ -6,11 +6,11 @@
 //
 
 import Foundation
-import RxSwift
 import Alamofire
+import RxSwift
 
 final class NetworkService {
-    func request(endPoint: Requestable) ->  Single<Data>  {
+    func request(endPoint: Requestable) -> Single<Data> {
         return Single.create { observer in
             
             guard let request = endPoint.urlRequest else {

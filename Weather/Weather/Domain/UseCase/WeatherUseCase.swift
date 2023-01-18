@@ -25,8 +25,8 @@ extension WeatherUseCase {
                     switch result {
                     case .success(let data):
                         observer(.success(data))
-                    case .failure(_):
-                        let error = NetworkError.reponseFailed
+                    case .failure(let error):
+                        let error = NetworkError.error(error)
                         observer(.failure(error))
                     }
                 }

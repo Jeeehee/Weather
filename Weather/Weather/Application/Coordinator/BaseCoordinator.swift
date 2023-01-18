@@ -22,7 +22,7 @@ extension BaseCoordinator {
     
     func childDidFinish(_ coordinator: BaseCoordinator) {
         if let childIndex = childCoordinators.enumerated()
-            .first(where: {$1 === coordinator} )?
+            .first(where: {$1 === coordinator})?
             .offset { childCoordinators.remove(at: childIndex) }
     }
 }
