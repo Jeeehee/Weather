@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 enum EndPoint {
-    case weather(city: String, appKey: String)
+    case weather(lat: String, lon: String, apiKey: String)
 }
 
 extension EndPoint: Requestable {
@@ -23,15 +23,17 @@ extension EndPoint: Requestable {
     
     var path: String {
         switch self {
-        case .weather: return "/data/2.5/weather"
+        case .weather: return "/data/3.0/onecall"
         }
     }
     
     var queryItems: [URLQueryItem] {
         switch self {
-        case .weather(let city, let apiKey):
+        case .weather(let lat, let lon, let apiKey):
             return [
-                URLQueryItem(name: "q", value: "\(city)"),
+                URLQueryItem(name: "lat", value: "\(lat)"),
+                URLQueryItem(name: "lon", value: "\(lon)"),
+                URLQueryItem(name: "exclude", value: "minutely"),
                 URLQueryItem(name: "appid", value: "\(apiKey)")]
         }
     }
