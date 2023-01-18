@@ -21,15 +21,14 @@ final class WeatherRepositoryImpl {
 }
 
 extension WeatherRepositoryImpl: WeatherRepository, ResponseDecoder {
-    func fetchList(endPoint: Requestable) -> Single<Weather> {
-        return Single.create { observer in
+    func fetchList<T: Decodable>(_ type: T.Type, endPoint: Requestable) -> Single<T> {
+        return Single<T>.create { observer in
             self.networkService
                 .request(endPoint: endPoint)
                 .subscribe { result in
                     switch result {
                     case .success(let data):
-                        // Data 제대로 들어옴try? JSONDecoder().decode(T.self, from: data)
-                        guard let decodeData = self.decode(Weather.self, data: data) else {
+                        guard let decodeData = self.decode(T.self, data: data) else {
                             let error = NetworkError.decodeFailed
                             observer(.failure(error))
                             return }

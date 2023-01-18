@@ -9,5 +9,5 @@ import Foundation
 import RxSwift
 
 protocol WeatherRepository {
-    func fetchList(endPoint: Requestable) -> Single<Weather>
+    func fetchList<T: Decodable>(_ type: T.Type,endPoint: Requestable) -> Single<T>
 }

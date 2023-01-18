@@ -17,11 +17,10 @@ final class WeatherUseCase {
 }
 
 extension WeatherUseCase {
-    func start(city: String, appKey: String) -> Single<Weather> {
-        return Single.create { observer in
+    func start<T: Decodable>(_ type: T.Type, lat: String, lon: String, apiKey: String) -> Single<T> {
+        return Single<T>.create { observer in
             self.repository
-                .fetchList(endPoint: EndPoint.weather(
-                    city: city, appKey: appKey))
+                .fetchList(T.self, endPoint: EndPoint.weather(lat: lat, lon: lon, apiKey: apiKey))
                 .subscribe { result in
                     switch result {
                     case .success(let data):
