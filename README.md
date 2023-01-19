@@ -1,11 +1,14 @@
-# Weather
+# Weather ![Vector](https://user-images.githubusercontent.com/92635121/213335188-b264c2a2-2981-4218-8605-86ab7ac421bf.png)
+
 > **기간**  :  2023.01.16 ~ 2023.01.19   
 > **Architecture**  :  MVVM+C, CleanArchitecture  
 > **사용 언어**  :  RxSwift
 
 <br>
 
+
 ## 구현사항
+
 - [x] 실시간 날씨
 - [x] 시간 별 날씨
 - [x] 5일간 예보
@@ -13,10 +16,15 @@
 - [x] 습도, 체감온도, 기압, 풍속 표시
 
 ## 실행 화면
+<img width="200" alt="이미지 제목" src="https://user-images.githubusercontent.com/92635121/213342646-f6072439-75c6-4c8d-b631-92d0911a27ce.gif">
 
 <br>
 
-## Architecture :  MVVM+C, CleanArchitecture  
+## Architecture :  MVVM+C, CleanArchitecture
+[해당 아키텍처 채택 이유](https://github.com/Jeeehee/Weather/wiki/MVVM-C,-CleanArchitecture-%EC%B1%84%ED%83%9D-%EC%9D%B4%EC%9C%A0)
+
+![Flow](https://user-images.githubusercontent.com/92635121/213339815-c3d74911-b1f9-4b74-a55a-c455323550fb.png)
+
 
 <br>
 
