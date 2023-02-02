@@ -86,7 +86,7 @@ extension CurrentWeatherCell {
         guard let model = model else { return }
         guard let daily = and else { return }
     
-        cityLabel.text = "아산"
+        cityLabel.text = Text.FirstPlace.cityName
         temperatureLabel.text = "\(String.fahrenheitTocelsius(fahrenheit: model.temp))°"
         minimumLabel.text = "최저 \(String.fahrenheitTocelsius(fahrenheit: daily.temp.min))°"
         maximumLabel.text = "최고 \(String.fahrenheitTocelsius(fahrenheit: daily.temp.max))°"

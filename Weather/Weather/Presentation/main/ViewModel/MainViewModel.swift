@@ -53,7 +53,7 @@ final class MainViewModel: MainViewModelProtocol {
 extension MainViewModel {
     func bind(to navigation: Navigation) {
         useCase
-            .start(WeatherList.self, lat: "36.783611", lon: "127.004173", apiKey: apiKey)
+            .start(WeatherList.self, lat: Text.FirstPlace.lat, lon: Text.FirstPlace.lon, apiKey: apiKey)
             .subscribe { event in
                 switch event {
                 case .success(let data):

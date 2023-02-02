@@ -10,7 +10,6 @@ import SnapKit
 import RxCocoa
 import RxSwift
 import RxAppState
-import RxDataSources
 import Alamofire
 
 class MainViewController: UIViewController {
@@ -56,22 +55,23 @@ class MainViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.item
-            .subscribe { data in
-                guard let data = data.element else { return }
-                self.dataSource.item = data
+            .withUnretained(self)
+            .subscribe { owner, data in
+                owner.dataSource.item = data
                 
                 DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+                    owner.collectionView.reloadData()
                 }
             }
             .disposed(by: disposeBag)
         
         collectionView.rx
             .willBeginDragging
-            .subscribe(onNext: {
-                self.view.endEditing(true)
-                self.searchBar.resignFirstResponder()
-            })
+            .withUnretained(self)
+            .subscribe { owner, _ in
+                owner.view.endEditing(true)
+                owner.searchBar.resignFirstResponder()
+            }
             .disposed(by: disposeBag)
     }
     
@@ -112,7 +112,6 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: UISearchBarDelegate {
-    
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.becomeFirstResponder()
     }
